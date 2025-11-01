@@ -1,29 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-  <title>Debt Solver</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    table { border-collapse: collapse; margin-top: 10px; }
-    td, th { border: 1px solid #ccc; padding: 5px; text-align: center; }
-    input[type="number"] { width: 70px; }
-    button { margin-top: 10px; padding: 5px 10px; }
-    .result { margin-top: 20px; font-weight: bold; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cash Settlement Project</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/5548f5ed00.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" type="module"></script>
 </head>
+
 <body>
+    <nav class="navbar">
+        <img class="navbar_logo" src="logo.jpg" alt="">
+        <h1 class="navbar_h1">Settle Your Payment</h1>
+    </nav>
+    <div id="container">
+        <div id="mynetwork"></div>
+        <div id="container2">
+            <span id="temptext" style="width: 100%; text-align: center; font-size: x-large">
+                Click on Solve to settle
+            </span>
+            <div id="mynetwork2" style="display: none"></div>
+        </div>
+    </div>
 
-<h2>Debt Solver</h2>
-
-<label>Number of Persons: </label>
-<input type="number" id="numPersons" min="2" value="3">
-<button onclick="generateTable()">Generate Debt Table</button>
-
-<div id="tableContainer"></div>
-<button id="solveBtn" style="display:none;" onclick="solveDebt()">Solve Debt</button>
-
-<div class="result" id="result"></div>
-
-<script src="script.js"></script>
+    <div>
+        <br>
+        <button type="button" class="btn btn-danger" id="generate-graph">Get New Problem</button>
+        <br>
+        <button type="button" class="btn btn-success" id="solve">Solve</button>
+    </div>
 </body>
+
 </html>
