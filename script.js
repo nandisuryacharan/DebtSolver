@@ -38,7 +38,7 @@ onload = function () {
   document.getElementById("createPersons").onclick = function () {
     totalPersons = parseInt(document.getElementById("numPersons").value);
     if (isNaN(totalPersons) || totalPersons <= 0) {
-      alert("Please enter a valid number of persons.");
+      alert("Please enter a valid number of persons (positive integer).");
       return;
     }
     edgesInput = [];
@@ -46,14 +46,33 @@ onload = function () {
     document.getElementById("transactionInput").style.display = "block";
   };
 
-  // Add transaction
+  // Add transaction (with input validation)
   document.getElementById("addTransaction").onclick = function () {
     const from = parseInt(document.getElementById("fromPerson").value);
     const to = parseInt(document.getElementById("toPerson").value);
-    const amount = parseInt(document.getElementById("amount").value);
+    const amount = parseFloat(document.getElementById("amount").value);
 
-    if (isNaN(from) || isNaN(to) || isNaN(amount) || from === to || amount <= 0 || from > totalPersons || to > totalPersons) {
-      alert("Invalid input.");
+    // Check for missing or invalid inputs
+    if (isNaN(from) || isNaN(to) || isNaN(amount)) {
+      alert("Please fill all fields with valid numbers!");
+      return;
+    }
+
+    // Prevent self-transaction
+    if (from === to) {
+      alert("A person cannot owe money to themselves!");
+      return;
+    }
+
+    // Prevent invalid person IDs
+    if (from < 1 || to < 1 || from > totalPersons || to > totalPersons) {
+      alert(`Person IDs must be between 1 and ${totalPersons}.`);
+      return;
+    }
+
+    // Prevent negative or zero amount
+    if (amount <= 0) {
+      alert("Amount must be a positive number greater than 0!");
       return;
     }
 
@@ -63,6 +82,11 @@ onload = function () {
     else edgesInput.push({ from, to, amount });
 
     renderTable();
+
+    // Clear inputs for better UX
+    document.getElementById("fromPerson").value = "";
+    document.getElementById("toPerson").value = "";
+    document.getElementById("amount").value = "";
   };
 
   function renderTable() {
@@ -80,9 +104,16 @@ onload = function () {
       alert("Add at least one transaction!");
       return;
     }
+
     const nodes = [];
-    for (let i = 1; i <= totalPersons; i++) nodes.push({ id: i, label: "Person " + i });
-    const edges = edgesInput.map(e => ({ from: e.from, to: e.to, label: String(e.amount) }));
+    for (let i = 1; i <= totalPersons; i++)
+      nodes.push({ id: i, label: "Person " + i });
+
+    const edges = edgesInput.map(e => ({
+      from: e.from,
+      to: e.to,
+      label: String(e.amount),
+    }));
 
     curr_data = { nodes: new vis.DataSet(nodes), edges: edges };
     network.setData(curr_data);
@@ -90,10 +121,10 @@ onload = function () {
     container2.style.display = "none";
   };
 
-  // Solve
+  // Solve debts
   solve.onclick = function () {
     if (!curr_data) {
-      alert("Generate graph first!");
+      alert("Generate the graph first!");
       return;
     }
     temptext.style.display = "none";
